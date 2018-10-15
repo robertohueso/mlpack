@@ -35,10 +35,7 @@ template<typename KernelType,
 using KDEType = KDE<metric::EuclideanDistance,
                     arma::mat,
                     KernelType,
-                    TreeType,
-                    TreeType<metric::EuclideanDistance,
-                             kde::KDEStat,
-                             arma::mat>::template DualTreeTraverser>;
+                    TreeType>;
 
 /**
  * DualMonoKDE computes a Kernel Density Estimation on the given KDEType.

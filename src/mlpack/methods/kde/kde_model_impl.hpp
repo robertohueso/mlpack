@@ -253,8 +253,8 @@ void DualBiKDE::operator()(KDETypeT<KernelType, TreeType>* kde) const
 
 // Evaluation specialized for Gaussian Kernel
 template<template<typename TreeMetricType,
-                    typename TreeStatType,
-                    typename TreeMatType> class TreeType>
+                  typename TreeStatType,
+                  typename TreeMatType> class TreeType>
 void DualBiKDE::operator()(KDETypeT<kernel::GaussianKernel,
                            TreeType>* kde) const
 {
@@ -269,8 +269,8 @@ void DualBiKDE::operator()(KDETypeT<kernel::GaussianKernel,
 
 // Evaluation specialized for EpanechnikovKernel Kernel
 template<template<typename TreeMetricType,
-                    typename TreeStatType,
-                    typename TreeMatType> class TreeType>
+                  typename TreeStatType,
+                  typename TreeMatType> class TreeType>
 void DualBiKDE::operator()(KDETypeT<kernel::EpanechnikovKernel,
                            TreeType>* kde) const
 {
@@ -285,8 +285,8 @@ void DualBiKDE::operator()(KDETypeT<kernel::EpanechnikovKernel,
 
 // Evaluation specialized for SphericalKernel Kernel
 template<template<typename TreeMetricType,
-                    typename TreeStatType,
-                    typename TreeMatType> class TreeType>
+                  typename TreeStatType,
+                  typename TreeMatType> class TreeType>
 void DualBiKDE::operator()(KDETypeT<kernel::SphericalKernel,
                            TreeType>* kde) const
 {
