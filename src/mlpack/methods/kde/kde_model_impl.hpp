@@ -254,7 +254,7 @@ void DualMonoKDE::operator()(KDETypeT<KernelType, TreeType>* kde) const
   else
     throw std::runtime_error("no KDE model initialized");
 }
-/*
+
 // Evaluation specialized for Gaussian Kernel
 template<template<typename TreeMetricType,
                     typename TreeStatType,
@@ -271,7 +271,7 @@ void DualMonoKDE::operator()(KDETypeT<kernel::GaussianKernel,
   else
     throw std::runtime_error("no KDE model initialized");
 }
-
+/*
 // Evaluation specialized for EpanechnikovKernel Kernel
 template<template<typename TreeMetricType,
                     typename TreeStatType,
