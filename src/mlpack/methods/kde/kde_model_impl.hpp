@@ -92,6 +92,7 @@ inline void KDEModel::BuildModel(arma::mat&& referenceSet)
     kdeModel = new KDEType<kernel::GaussianKernel, tree::KDTree>
         (bandwidth, relError, absError);
   }
+  /*
   else if (kernelType == GAUSSIAN_KERNEL && treeType == BALL_TREE)
   {
     kdeModel = new KDEType<kernel::GaussianKernel, tree::BallTree>
@@ -212,7 +213,7 @@ inline void KDEModel::BuildModel(arma::mat&& referenceSet)
     kdeModel = new KDEType<kernel::TriangularKernel, tree::RTree>
         (bandwidth, relError, absError);
   }
-
+  */
   TrainVisitor train(std::move(referenceSet));
   boost::apply_visitor(train, kdeModel);
 }
@@ -254,7 +255,7 @@ void DualMonoKDE::operator()(KDETypeT<KernelType, TreeType>* kde) const
   else
     throw std::runtime_error("no KDE model initialized");
 }
-
+  /*
 // Evaluation specialized for Gaussian Kernel
 template<template<typename TreeMetricType,
                     typename TreeStatType,
@@ -305,7 +306,7 @@ void DualMonoKDE::operator()(KDETypeT<kernel::SphericalKernel,
   else
     throw std::runtime_error("no KDE model initialized");
 }
-
+  */
 // Parameters for KDE evaluation
 DualBiKDE::DualBiKDE(arma::mat&& querySet, arma::vec& estimations):
     dimension(querySet.n_rows),
@@ -325,7 +326,7 @@ void DualBiKDE::operator()(KDETypeT<KernelType, TreeType>* kde) const
   else
     throw std::runtime_error("no KDE model initialized");
 }
-
+  /*
 // Evaluation specialized for Gaussian Kernel
 template<template<typename TreeMetricType,
                     typename TreeStatType,
@@ -373,7 +374,7 @@ void DualBiKDE::operator()(KDETypeT<kernel::SphericalKernel,
   else
     throw std::runtime_error("no KDE model initialized");
 }
-
+  */
 // Parameters for Train.
 TrainVisitor::TrainVisitor(arma::mat&& referenceSet) :
     referenceSet(std::move(referenceSet))
@@ -384,7 +385,7 @@ template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
                   typename TreeMatType> class TreeType>
-void TrainVisitor::operator()(KDETypeT<KernelType, TreeType>* kde) const
+void TrainVisitor::operator()(KDEType<KernelType, TreeType>* kde) const
 {
   if (kde)
     kde->Train(std::move(referenceSet));

@@ -67,7 +67,7 @@ class DualMonoKDE : public boost::static_visitor<void>
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
   void operator()(KDETypeT<KernelType, TreeType>* kde) const;
-
+  /*
   //! DualMonoKDE specialized on Gaussian Kernel KDEType.
   template<template<typename TreeMetricType,
                     typename TreeStatType,
@@ -87,7 +87,7 @@ class DualMonoKDE : public boost::static_visitor<void>
   void operator()(KDETypeT<kernel::SphericalKernel, TreeType>* kde) const;
 
   // TODO Implement specific cases where a leaf size can be selected.
-
+  */
   //! DualMonoKDE constructor.
   DualMonoKDE(arma::vec& estimations);
 };
@@ -123,7 +123,7 @@ class DualBiKDE : public boost::static_visitor<void>
                     typename TreeMatType> class TreeType>
   void operator()(KDETypeT<KernelType, TreeType>* kde) const;
 
-  //! DualBiKDE specialized on Gaussian Kernel KDEType.
+  /*//! DualBiKDE specialized on Gaussian Kernel KDEType.
   template<template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
@@ -139,7 +139,7 @@ class DualBiKDE : public boost::static_visitor<void>
   template<template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDETypeT<kernel::SphericalKernel, TreeType>* kde) const;
+                    void operator()(KDETypeT<kernel::SphericalKernel, TreeType>* kde) const;*/
 
   // TODO Implement specific cases where a leaf size can be selected.
 
@@ -157,19 +157,20 @@ class TrainVisitor : public boost::static_visitor<void>
   arma::mat&& referenceSet;
 
  public:
+  /*
   //! Alias template necessary for visual C++ compiler.
   template<typename KernelType,
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
   using KDETypeT = KDEType<KernelType, TreeType>;
-
+  */
   //! Default TrainVisitor on some KDEType.
   template<typename KernelType,
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDETypeT<KernelType, TreeType>* kde) const;
+  void operator()(KDEType<KernelType, TreeType>* kde) const;
 
   // TODO Implement specific cases where a leaf size can be selected.
 
@@ -224,7 +225,8 @@ class KDEModel
    * kdeModel holds an instance of each possible combination of KernelType and
    * TreeType. It is initialized using BuildModel.
    */
-  boost::variant<KDEType<kernel::GaussianKernel, tree::KDTree>*,
+  boost::variant<KDEType<kernel::GaussianKernel, tree::KDTree>*
+                 /*
                  KDEType<kernel::GaussianKernel, tree::BallTree>*,
                  KDEType<kernel::GaussianKernel, tree::StandardCoverTree>*,
                  KDEType<kernel::GaussianKernel, tree::Octree>*,
@@ -248,7 +250,7 @@ class KDEModel
                  KDEType<kernel::TriangularKernel, tree::BallTree>*,
                  KDEType<kernel::TriangularKernel, tree::StandardCoverTree>*,
                  KDEType<kernel::TriangularKernel, tree::Octree>*,
-                 KDEType<kernel::TriangularKernel, tree::RTree>*> kdeModel;
+                 KDEType<kernel::TriangularKernel, tree::RTree>**/> kdeModel;
 
  public:
   /**
