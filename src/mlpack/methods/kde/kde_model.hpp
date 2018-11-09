@@ -157,19 +157,12 @@ class TrainVisitor : public boost::static_visitor<void>
   arma::mat&& referenceSet;
 
  public:
-  //! Alias template necessary for visual C++ compiler.
-  template<typename KernelType,
-           template<typename TreeMetricType,
-                    typename TreeStatType,
-                    typename TreeMatType> class TreeType>
-  using KDETypeT = KDEType<KernelType, TreeType>;
-
   //! Default TrainVisitor on some KDEType.
   template<typename KernelType,
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDETypeT<KernelType, TreeType>* kde) const;
+  void operator()(KDEType<KernelType, TreeType>* kde) const;
 
   // TODO Implement specific cases where a leaf size can be selected.
 

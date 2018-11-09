@@ -384,7 +384,7 @@ template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
                   typename TreeMatType> class TreeType>
-void TrainVisitor::operator()(KDETypeT<KernelType, TreeType>* kde) const
+void TrainVisitor::operator()(KDEType<KernelType, TreeType>* kde) const
 {
   if (kde)
     kde->Train(std::move(referenceSet));
