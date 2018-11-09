@@ -254,7 +254,7 @@ void DualMonoKDE::operator()(KDETypeT<KernelType, TreeType>* kde) const
   else
     throw std::runtime_error("no KDE model initialized");
 }
-
+/*
 // Evaluation specialized for Gaussian Kernel
 template<template<typename TreeMetricType,
                     typename TreeStatType,
@@ -305,6 +305,7 @@ void DualMonoKDE::operator()(KDETypeT<kernel::SphericalKernel,
   else
     throw std::runtime_error("no KDE model initialized");
 }
+*/
 
 // Parameters for KDE evaluation
 DualBiKDE::DualBiKDE(arma::mat&& querySet, arma::vec& estimations):
@@ -325,7 +326,7 @@ void DualBiKDE::operator()(KDETypeT<KernelType, TreeType>* kde) const
   else
     throw std::runtime_error("no KDE model initialized");
 }
-
+/*
 // Evaluation specialized for Gaussian Kernel
 template<template<typename TreeMetricType,
                     typename TreeStatType,
@@ -373,6 +374,7 @@ void DualBiKDE::operator()(KDETypeT<kernel::SphericalKernel,
   else
     throw std::runtime_error("no KDE model initialized");
 }
+*/
 
 // Parameters for Train.
 TrainVisitor::TrainVisitor(arma::mat&& referenceSet) :

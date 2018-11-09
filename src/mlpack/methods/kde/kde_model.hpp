@@ -67,7 +67,7 @@ class DualMonoKDE : public boost::static_visitor<void>
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
   void operator()(KDETypeT<KernelType, TreeType>* kde) const;
-
+  /*
   //! DualMonoKDE specialized on Gaussian Kernel KDEType.
   template<template<typename TreeMetricType,
                     typename TreeStatType,
@@ -85,7 +85,7 @@ class DualMonoKDE : public boost::static_visitor<void>
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
   void operator()(KDETypeT<kernel::SphericalKernel, TreeType>* kde) const;
-
+  */
   // TODO Implement specific cases where a leaf size can be selected.
 
   //! DualMonoKDE constructor.
@@ -122,7 +122,7 @@ class DualBiKDE : public boost::static_visitor<void>
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
   void operator()(KDETypeT<KernelType, TreeType>* kde) const;
-
+  /*
   //! DualBiKDE specialized on Gaussian Kernel KDEType.
   template<template<typename TreeMetricType,
                     typename TreeStatType,
@@ -140,7 +140,7 @@ class DualBiKDE : public boost::static_visitor<void>
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
   void operator()(KDETypeT<kernel::SphericalKernel, TreeType>* kde) const;
-
+  */
   // TODO Implement specific cases where a leaf size can be selected.
 
   //! DualBiKDE constructor. Takes ownership of the given querySet.
