@@ -34,14 +34,13 @@ namespace kde {
 template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
-                  typename TreeMatType> class TreeType>
+                  typename TreeMatType> class TreeType,
+         template<typename RuleType> class DualTreeTraversalType>
 using KDEType = KDE<metric::EuclideanDistance,
                     arma::mat,
                     KernelType,
                     TreeType,
-                    TreeType<metric::EuclideanDistance,
-                             kde::KDEStat,
-                             arma::mat>::template DualTreeTraverser>;
+                    DualTreeTraversalType>;
 
 /**
  * DualMonoKDE computes a Kernel Density Estimation on the given KDEType.
@@ -59,7 +58,9 @@ class DualMonoKDE : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  using KDETypeT = KDEType<KernelType, TreeType>;
+  using KDETypeT = KDEType<KernelType, TreeType, TreeType<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>;
 
   //! Default DualMonoKDE on some KDEType.
   template<typename KernelType,
@@ -114,7 +115,9 @@ class DualBiKDE : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  using KDETypeT = KDEType<KernelType, TreeType>;
+  using KDETypeT = KDEType<KernelType, TreeType, TreeType<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>;
 
   //! Default DualBiKDE on some KDEType.
   template<typename KernelType,
@@ -162,7 +165,9 @@ class TrainVisitor : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  using KDETypeT = KDEType<KernelType, TreeType>;
+  using KDETypeT = KDEType<KernelType, TreeType, TreeType<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>;
 
   //! Default TrainVisitor on some KDEType.
   template<typename KernelType,
@@ -224,31 +229,84 @@ class KDEModel
    * kdeModel holds an instance of each possible combination of KernelType and
    * TreeType. It is initialized using BuildModel.
    */
-  boost::variant<KDEType<kernel::GaussianKernel, tree::KDTree>*,
-                 KDEType<kernel::GaussianKernel, tree::BallTree>*,
-                 KDEType<kernel::GaussianKernel, tree::StandardCoverTree>*,
-                 KDEType<kernel::GaussianKernel, tree::Octree>*,
-                 KDEType<kernel::GaussianKernel, tree::RTree>*,
-                 KDEType<kernel::EpanechnikovKernel, tree::KDTree>*,
-                 KDEType<kernel::EpanechnikovKernel, tree::BallTree>*,
-                 KDEType<kernel::EpanechnikovKernel, tree::StandardCoverTree>*,
-                 KDEType<kernel::EpanechnikovKernel, tree::Octree>*,
-                 KDEType<kernel::EpanechnikovKernel, tree::RTree>*,
-                 KDEType<kernel::LaplacianKernel, tree::KDTree>*,
-                 KDEType<kernel::LaplacianKernel, tree::BallTree>*,
-                 KDEType<kernel::LaplacianKernel, tree::StandardCoverTree>*,
-                 KDEType<kernel::LaplacianKernel, tree::Octree>*,
-                 KDEType<kernel::LaplacianKernel, tree::RTree>*,
-                 KDEType<kernel::SphericalKernel, tree::KDTree>*,
-                 KDEType<kernel::SphericalKernel, tree::BallTree>*,
-                 KDEType<kernel::SphericalKernel, tree::StandardCoverTree>*,
-                 KDEType<kernel::SphericalKernel, tree::Octree>*,
-                 KDEType<kernel::SphericalKernel, tree::RTree>*,
-                 KDEType<kernel::TriangularKernel, tree::KDTree>*,
-                 KDEType<kernel::TriangularKernel, tree::BallTree>*,
-                 KDEType<kernel::TriangularKernel, tree::StandardCoverTree>*,
-                 KDEType<kernel::TriangularKernel, tree::Octree>*,
-                 KDEType<kernel::TriangularKernel, tree::RTree>*> kdeModel;
+  boost::variant<KDEType<kernel::GaussianKernel, tree::KDTree, tree::KDTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::GaussianKernel, tree::BallTree, tree::BallTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::GaussianKernel, tree::StandardCoverTree, tree::StandardCoverTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::GaussianKernel, tree::Octree, tree::Octree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::GaussianKernel, tree::RTree, tree::RTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::EpanechnikovKernel, tree::KDTree, tree::KDTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::EpanechnikovKernel, tree::BallTree, tree::BallTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::EpanechnikovKernel, tree::StandardCoverTree, tree::StandardCoverTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::EpanechnikovKernel, tree::Octree, tree::Octree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::EpanechnikovKernel, tree::RTree, tree::RTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::LaplacianKernel, tree::KDTree, tree::KDTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::LaplacianKernel, tree::BallTree, tree::BallTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::LaplacianKernel, tree::StandardCoverTree, tree::StandardCoverTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::LaplacianKernel, tree::Octree, tree::Octree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::LaplacianKernel, tree::RTree, tree::RTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::SphericalKernel, tree::KDTree, tree::KDTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::SphericalKernel, tree::BallTree, tree::BallTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::SphericalKernel, tree::StandardCoverTree, tree::StandardCoverTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::SphericalKernel, tree::Octree, tree::Octree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::SphericalKernel, tree::RTree, tree::RTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::SphericalKernel, tree::RTree, tree::RTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::TriangularKernel, tree::KDTree, tree::KDTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::TriangularKernel, tree::BallTree, tree::BallTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::TriangularKernel, tree::StandardCoverTree, tree::StandardCoverTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::TriangularKernel, tree::Octree, tree::Octree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*,
+                 KDEType<kernel::TriangularKernel, tree::RTree, tree::RTree<metric::EuclideanDistance,
+                                                          kde::KDEStat,
+                                                          arma::mat>::template DualTreeTraverser>*> kdeModel;
 
  public:
   /**

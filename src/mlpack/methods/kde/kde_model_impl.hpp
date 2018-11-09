@@ -89,127 +89,202 @@ inline void KDEModel::BuildModel(arma::mat&& referenceSet)
 
   if (kernelType == GAUSSIAN_KERNEL && treeType == KD_TREE)
   {
-    kdeModel = new KDEType<kernel::GaussianKernel, tree::KDTree>
+    kdeModel = new KDEType<kernel::GaussianKernel, tree::KDTree,
+                           tree::KDTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == GAUSSIAN_KERNEL && treeType == BALL_TREE)
   {
-    kdeModel = new KDEType<kernel::GaussianKernel, tree::BallTree>
+    kdeModel = new KDEType<kernel::GaussianKernel, tree::BallTree,
+                           tree::BallTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == GAUSSIAN_KERNEL && treeType == COVER_TREE)
   {
-    kdeModel = new KDEType<kernel::GaussianKernel, tree::StandardCoverTree>
+    kdeModel = new KDEType<kernel::GaussianKernel, tree::StandardCoverTree,
+                           tree::StandardCoverTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == GAUSSIAN_KERNEL && treeType == OCTREE)
   {
-    kdeModel = new KDEType<kernel::GaussianKernel, tree::Octree>
+    kdeModel = new KDEType<kernel::GaussianKernel, tree::Octree,
+                           tree::Octree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == GAUSSIAN_KERNEL && treeType == R_TREE)
   {
-    kdeModel = new KDEType<kernel::GaussianKernel, tree::RTree>
+    kdeModel = new KDEType<kernel::GaussianKernel, tree::RTree,
+                           tree::RTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == EPANECHNIKOV_KERNEL && treeType == KD_TREE)
   {
-    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::KDTree>
+    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::KDTree,
+                           tree::KDTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == EPANECHNIKOV_KERNEL && treeType == BALL_TREE)
   {
-    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::BallTree>
+    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::BallTree,
+                           tree::BallTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == EPANECHNIKOV_KERNEL && treeType == COVER_TREE)
   {
-    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::StandardCoverTree>
+    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::StandardCoverTree,
+                           tree::StandardCoverTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == EPANECHNIKOV_KERNEL && treeType == OCTREE)
   {
-    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::Octree>
+    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::Octree,
+                           tree::Octree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == EPANECHNIKOV_KERNEL && treeType == R_TREE)
   {
-    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::RTree>
+    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::RTree,
+                           tree::RTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == LAPLACIAN_KERNEL && treeType == KD_TREE)
   {
-    kdeModel = new KDEType<kernel::LaplacianKernel, tree::KDTree>
+    kdeModel = new KDEType<kernel::LaplacianKernel, tree::KDTree,
+                           tree::KDTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == LAPLACIAN_KERNEL && treeType == BALL_TREE)
   {
-    kdeModel = new KDEType<kernel::LaplacianKernel, tree::BallTree>
+    kdeModel = new KDEType<kernel::LaplacianKernel, tree::BallTree,
+                           tree::BallTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == LAPLACIAN_KERNEL && treeType == COVER_TREE)
   {
-    kdeModel = new KDEType<kernel::LaplacianKernel, tree::StandardCoverTree>
+    kdeModel = new KDEType<kernel::LaplacianKernel, tree::StandardCoverTree,
+                           tree::StandardCoverTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == LAPLACIAN_KERNEL && treeType == OCTREE)
   {
-    kdeModel = new KDEType<kernel::LaplacianKernel, tree::Octree>
+    kdeModel = new KDEType<kernel::LaplacianKernel, tree::Octree,
+                           tree::Octree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == LAPLACIAN_KERNEL && treeType == R_TREE)
   {
-    kdeModel = new KDEType<kernel::LaplacianKernel, tree::RTree>
+    kdeModel = new KDEType<kernel::LaplacianKernel, tree::RTree,
+                           tree::RTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == SPHERICAL_KERNEL && treeType == KD_TREE)
   {
-    kdeModel = new KDEType<kernel::SphericalKernel, tree::KDTree>
+    kdeModel = new KDEType<kernel::SphericalKernel, tree::KDTree,
+                           tree::KDTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == SPHERICAL_KERNEL && treeType == BALL_TREE)
   {
-    kdeModel = new KDEType<kernel::SphericalKernel, tree::BallTree>
+    kdeModel = new KDEType<kernel::SphericalKernel, tree::BallTree,
+                           tree::BallTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == SPHERICAL_KERNEL && treeType == COVER_TREE)
   {
-    kdeModel = new KDEType<kernel::SphericalKernel, tree::StandardCoverTree>
+    kdeModel = new KDEType<kernel::SphericalKernel, tree::StandardCoverTree,
+                           tree::StandardCoverTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == SPHERICAL_KERNEL && treeType == OCTREE)
   {
-    kdeModel = new KDEType<kernel::SphericalKernel, tree::Octree>
+    kdeModel = new KDEType<kernel::SphericalKernel, tree::Octree,
+                           tree::Octree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == SPHERICAL_KERNEL && treeType == R_TREE)
   {
-    kdeModel = new KDEType<kernel::SphericalKernel, tree::RTree>
+    kdeModel = new KDEType<kernel::SphericalKernel, tree::RTree,
+                           tree::RTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == TRIANGULAR_KERNEL && treeType == KD_TREE)
   {
-    kdeModel = new KDEType<kernel::TriangularKernel, tree::KDTree>
+    kdeModel = new KDEType<kernel::TriangularKernel, tree::KDTree,
+                           tree::KDTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
   else if (kernelType == TRIANGULAR_KERNEL && treeType == BALL_TREE)
   {
-    kdeModel = new KDEType<kernel::TriangularKernel, tree::BallTree>
+    kdeModel = new KDEType<kernel::TriangularKernel, tree::BallTree,
+                           tree::BallTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
    else if (kernelType == TRIANGULAR_KERNEL && treeType == COVER_TREE)
   {
-    kdeModel = new KDEType<kernel::TriangularKernel, tree::StandardCoverTree>
+    kdeModel = new KDEType<kernel::TriangularKernel, tree::StandardCoverTree,
+                           tree::StandardCoverTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
    else if (kernelType == TRIANGULAR_KERNEL && treeType == OCTREE)
   {
-    kdeModel = new KDEType<kernel::TriangularKernel, tree::Octree>
+    kdeModel = new KDEType<kernel::TriangularKernel, tree::Octree,
+                           tree::Octree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
    else if (kernelType == TRIANGULAR_KERNEL && treeType == R_TREE)
   {
-    kdeModel = new KDEType<kernel::TriangularKernel, tree::RTree>
+    kdeModel = new KDEType<kernel::TriangularKernel, tree::RTree,
+                           tree::RTree<metric::EuclideanDistance,
+                                        kde::KDEStat,
+                                        arma::mat>::template DualTreeTraverser>
         (bandwidth, relError, absError);
   }
 
