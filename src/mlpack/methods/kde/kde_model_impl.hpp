@@ -256,11 +256,8 @@ void DualMonoKDE::operator()(KDETypeT<KernelType, TreeType>* kde) const
 }
 
 // Evaluation specialized for Gaussian Kernel
-template<template<typename TreeMetricType,
-                    typename TreeStatType,
-                    typename TreeMatType> class TreeType>
 void DualMonoKDE::operator()(KDETypeT<kernel::GaussianKernel,
-                             TreeType>* kde) const
+                             tree::KDTree>* kde) const
 {
   if (kde)
   {

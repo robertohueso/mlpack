@@ -69,10 +69,7 @@ class DualMonoKDE : public boost::static_visitor<void>
   void operator()(KDETypeT<KernelType, TreeType>* kde) const;
 
   //! DualMonoKDE specialized on Gaussian Kernel KDEType.
-  template<template<typename TreeMetricType,
-                    typename TreeStatType,
-                    typename TreeMatType> class TreeType>
-  void operator()(KDETypeT<kernel::GaussianKernel, TreeType>* kde) const;
+  void operator()(KDETypeT<kernel::GaussianKernel, tree::KDTree>* kde) const;
   /*
   //! DualMonoKDE specialized on Epanechnikov Kernel KDEType.
   template<template<typename TreeMetricType,
