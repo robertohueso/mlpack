@@ -249,12 +249,17 @@ template<typename KernelType,
                   typename TreeMatType> class TreeType>
 void DualMonoKDE::operator()(KDETypeT<KernelType, TreeType>* kde) const
 {
+  const size_t dimension = (kde->ReferenceTree())->Dataset().n_rows;
   if (kde)
+  {
     kde->Evaluate(estimations);
+    normalizeIfNeeded<KernelType>(kde->Kernel(), dimension);
+  }
   else
     throw std::runtime_error("no KDE model initialized");
 }
 
+/*
 // Evaluation specialized for Gaussian Kernel
 void DualMonoKDE::operator()(KDETypeT<kernel::GaussianKernel,
                              tree::KDTree>* kde) const
@@ -268,7 +273,7 @@ void DualMonoKDE::operator()(KDETypeT<kernel::GaussianKernel,
   else
     throw std::runtime_error("no KDE model initialized");
 }
-/*
+
 // Evaluation specialized for EpanechnikovKernel Kernel
 template<template<typename TreeMetricType,
                     typename TreeStatType,

@@ -68,8 +68,14 @@ class DualMonoKDE : public boost::static_visitor<void>
                     typename TreeMatType> class TreeType>
   void operator()(KDETypeT<KernelType, TreeType>* kde) const;
 
+  template<typename KernelType>
+  void normalizeIfNeeded(KernelType& /* kernel */, const size_t /* dimension*/ ) const { return; }
+
+  void normalizeIfNeeded(kernel::GaussianKernel& kernel, const size_t dimension) const
+  { estimations /= kernel.Normalizer(dimension); }
+
   //! DualMonoKDE specialized on Gaussian Kernel KDEType.
-  void operator()(KDETypeT<kernel::GaussianKernel, tree::KDTree>* kde) const;
+  //void operator()(KDETypeT<kernel::GaussianKernel, tree::KDTree>* kde) const;
   /*
   //! DualMonoKDE specialized on Epanechnikov Kernel KDEType.
   template<template<typename TreeMetricType,
