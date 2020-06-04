@@ -25,6 +25,9 @@
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/xml.hpp>
+#include <cereal/archives/json.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -89,18 +92,18 @@ bool Load(const std::string& filename,
   {
     if (f == format::xml)
     {
-      boost::archive::xml_iarchive ar(ifs);
-      ar >> boost::serialization::make_nvp(name.c_str(), t);
+      cereal::XMLInputArchive ar(ifs);
+      ar >> cereal::make_nvp(name.c_str(), t);
     }
     else if (f == format::text)
     {
-      boost::archive::text_iarchive ar(ifs);
-      ar >> boost::serialization::make_nvp(name.c_str(), t);
+      cereal::JSONInputArchive ar(ifs);
+      ar >> cereal::make_nvp(name.c_str(), t);
     }
     else if (f == format::binary)
     {
-      boost::archive::binary_iarchive ar(ifs);
-      ar >> boost::serialization::make_nvp(name.c_str(), t);
+      cereal::BinaryInputArchive ar(ifs);
+      ar >> cereal::make_nvp(name.c_str(), t);
     }
 
     return true;

@@ -21,6 +21,10 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/xml.hpp>
+#include <cereal/archives/json.hpp>
+
 namespace mlpack {
 namespace data {
 
@@ -365,18 +369,18 @@ bool Save(const std::string& filename,
   {
     if (f == format::xml)
     {
-      boost::archive::xml_oarchive ar(ofs);
-      ar << boost::serialization::make_nvp(name.c_str(), t);
+      cereal::XMLOutputArchive ar(ofs);
+      ar << cereal::make_nvp(name.c_str(), t);
     }
     else if (f == format::text)
     {
-      boost::archive::text_oarchive ar(ofs);
-      ar << boost::serialization::make_nvp(name.c_str(), t);
+      cereal::JSONOutputArchive ar(ofs);
+      ar << cereal::make_nvp(name.c_str(), t);
     }
     else if (f == format::binary)
     {
-      boost::archive::binary_oarchive ar(ofs);
-      ar << boost::serialization::make_nvp(name.c_str(), t);
+      cereal::BinaryOutputArchive ar(ofs);
+      ar << cereal::make_nvp(name.c_str(), t);
     }
 
     return true;

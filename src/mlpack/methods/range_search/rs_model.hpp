@@ -21,6 +21,7 @@
 #include <mlpack/core/tree/octree.hpp>
 #include <boost/variant.hpp>
 #include "range_search.hpp"
+#include <cereal/archives/json.hpp>
 
 namespace mlpack {
 namespace range {
