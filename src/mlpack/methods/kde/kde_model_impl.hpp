@@ -91,7 +91,6 @@ inline KDEModel::KDEModel(KDEModel&& other) :
 
 inline KDEModel& KDEModel::operator=(KDEModel other)
 {
-  boost::apply_visitor(DeleteVisitor(), kdeModel);
   bandwidth = other.bandwidth;
   relError = other.relError;
   absError = other.absError;
@@ -102,145 +101,137 @@ inline KDEModel& KDEModel::operator=(KDEModel other)
   initialSampleSize = other.initialSampleSize;
   mcEntryCoef = other.mcEntryCoef;
   mcBreakCoef = other.mcBreakCoef;
+  mode = other.mode;
   kdeModel = std::move(other.kdeModel);
   return *this;
 }
 
-// Clean memory.
-inline KDEModel::~KDEModel()
-{
-  boost::apply_visitor(DeleteVisitor(), kdeModel);
-}
-
 inline void KDEModel::BuildModel(arma::mat&& referenceSet)
 {
-  // Clean memory, if necessary.
-  boost::apply_visitor(DeleteVisitor(), kdeModel);
-
   // Build the actual model.
   if (kernelType == GAUSSIAN_KERNEL && treeType == KD_TREE)
   {
-    kdeModel = new KDEType<kernel::GaussianKernel, tree::KDTree>
+    kdeModel = KDEType<kernel::GaussianKernel, tree::KDTree>
         (relError, absError, kernel::GaussianKernel(bandwidth));
   }
   else if (kernelType == GAUSSIAN_KERNEL && treeType == BALL_TREE)
   {
-    kdeModel = new KDEType<kernel::GaussianKernel, tree::BallTree>
+    kdeModel = KDEType<kernel::GaussianKernel, tree::BallTree>
         (relError, absError, kernel::GaussianKernel(bandwidth));
   }
   else if (kernelType == GAUSSIAN_KERNEL && treeType == COVER_TREE)
   {
-    kdeModel = new KDEType<kernel::GaussianKernel, tree::StandardCoverTree>
+    kdeModel = KDEType<kernel::GaussianKernel, tree::StandardCoverTree>
         (relError, absError, kernel::GaussianKernel(bandwidth));
   }
   else if (kernelType == GAUSSIAN_KERNEL && treeType == OCTREE)
   {
-    kdeModel = new KDEType<kernel::GaussianKernel, tree::Octree>
+    kdeModel = KDEType<kernel::GaussianKernel, tree::Octree>
         (relError, absError, kernel::GaussianKernel(bandwidth));
   }
   else if (kernelType == GAUSSIAN_KERNEL && treeType == R_TREE)
   {
-    kdeModel = new KDEType<kernel::GaussianKernel, tree::RTree>
+    kdeModel = KDEType<kernel::GaussianKernel, tree::RTree>
         (relError, absError, kernel::GaussianKernel(bandwidth));
   }
   else if (kernelType == EPANECHNIKOV_KERNEL && treeType == KD_TREE)
   {
-    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::KDTree>
+    kdeModel = KDEType<kernel::EpanechnikovKernel, tree::KDTree>
         (relError, absError, kernel::EpanechnikovKernel(bandwidth));
   }
   else if (kernelType == EPANECHNIKOV_KERNEL && treeType == BALL_TREE)
   {
-    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::BallTree>
+    kdeModel = KDEType<kernel::EpanechnikovKernel, tree::BallTree>
         (relError, absError, kernel::EpanechnikovKernel(bandwidth));
   }
   else if (kernelType == EPANECHNIKOV_KERNEL && treeType == COVER_TREE)
   {
-    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::StandardCoverTree>
+    kdeModel = KDEType<kernel::EpanechnikovKernel, tree::StandardCoverTree>
         (relError, absError, kernel::EpanechnikovKernel(bandwidth));
   }
   else if (kernelType == EPANECHNIKOV_KERNEL && treeType == OCTREE)
   {
-    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::Octree>
+    kdeModel = KDEType<kernel::EpanechnikovKernel, tree::Octree>
         (relError, absError, kernel::EpanechnikovKernel(bandwidth));
   }
   else if (kernelType == EPANECHNIKOV_KERNEL && treeType == R_TREE)
   {
-    kdeModel = new KDEType<kernel::EpanechnikovKernel, tree::RTree>
+    kdeModel = KDEType<kernel::EpanechnikovKernel, tree::RTree>
         (relError, absError, kernel::EpanechnikovKernel(bandwidth));
   }
   else if (kernelType == LAPLACIAN_KERNEL && treeType == KD_TREE)
   {
-    kdeModel = new KDEType<kernel::LaplacianKernel, tree::KDTree>
+    kdeModel = KDEType<kernel::LaplacianKernel, tree::KDTree>
         (relError, absError, kernel::LaplacianKernel(bandwidth));
   }
   else if (kernelType == LAPLACIAN_KERNEL && treeType == BALL_TREE)
   {
-    kdeModel = new KDEType<kernel::LaplacianKernel, tree::BallTree>
+    kdeModel = KDEType<kernel::LaplacianKernel, tree::BallTree>
         (relError, absError, kernel::LaplacianKernel(bandwidth));
   }
   else if (kernelType == LAPLACIAN_KERNEL && treeType == COVER_TREE)
   {
-    kdeModel = new KDEType<kernel::LaplacianKernel, tree::StandardCoverTree>
+    kdeModel = KDEType<kernel::LaplacianKernel, tree::StandardCoverTree>
         (relError, absError, kernel::LaplacianKernel(bandwidth));
   }
   else if (kernelType == LAPLACIAN_KERNEL && treeType == OCTREE)
   {
-    kdeModel = new KDEType<kernel::LaplacianKernel, tree::Octree>
+    kdeModel = KDEType<kernel::LaplacianKernel, tree::Octree>
         (relError, absError, kernel::LaplacianKernel(bandwidth));
   }
   else if (kernelType == LAPLACIAN_KERNEL && treeType == R_TREE)
   {
-    kdeModel = new KDEType<kernel::LaplacianKernel, tree::RTree>
+    kdeModel = KDEType<kernel::LaplacianKernel, tree::RTree>
         (relError, absError, kernel::LaplacianKernel(bandwidth));
   }
   else if (kernelType == SPHERICAL_KERNEL && treeType == KD_TREE)
   {
-    kdeModel = new KDEType<kernel::SphericalKernel, tree::KDTree>
+    kdeModel = KDEType<kernel::SphericalKernel, tree::KDTree>
         (relError, absError, kernel::SphericalKernel(bandwidth));
   }
   else if (kernelType == SPHERICAL_KERNEL && treeType == BALL_TREE)
   {
-    kdeModel = new KDEType<kernel::SphericalKernel, tree::BallTree>
+    kdeModel = KDEType<kernel::SphericalKernel, tree::BallTree>
         (relError, absError, kernel::SphericalKernel(bandwidth));
   }
   else if (kernelType == SPHERICAL_KERNEL && treeType == COVER_TREE)
   {
-    kdeModel = new KDEType<kernel::SphericalKernel, tree::StandardCoverTree>
+    kdeModel = KDEType<kernel::SphericalKernel, tree::StandardCoverTree>
         (relError, absError, kernel::SphericalKernel(bandwidth));
   }
   else if (kernelType == SPHERICAL_KERNEL && treeType == OCTREE)
   {
-    kdeModel = new KDEType<kernel::SphericalKernel, tree::Octree>
+    kdeModel = KDEType<kernel::SphericalKernel, tree::Octree>
         (relError, absError, kernel::SphericalKernel(bandwidth));
   }
   else if (kernelType == SPHERICAL_KERNEL && treeType == R_TREE)
   {
-    kdeModel = new KDEType<kernel::SphericalKernel, tree::RTree>
+    kdeModel = KDEType<kernel::SphericalKernel, tree::RTree>
         (relError, absError, kernel::SphericalKernel(bandwidth));
   }
   else if (kernelType == TRIANGULAR_KERNEL && treeType == KD_TREE)
   {
-    kdeModel = new KDEType<kernel::TriangularKernel, tree::KDTree>
+    kdeModel = KDEType<kernel::TriangularKernel, tree::KDTree>
         (relError, absError, kernel::TriangularKernel(bandwidth));
   }
   else if (kernelType == TRIANGULAR_KERNEL && treeType == BALL_TREE)
   {
-    kdeModel = new KDEType<kernel::TriangularKernel, tree::BallTree>
+    kdeModel = KDEType<kernel::TriangularKernel, tree::BallTree>
         (relError, absError, kernel::TriangularKernel(bandwidth));
   }
   else if (kernelType == TRIANGULAR_KERNEL && treeType == COVER_TREE)
   {
-    kdeModel = new KDEType<kernel::TriangularKernel, tree::StandardCoverTree>
+    kdeModel = KDEType<kernel::TriangularKernel, tree::StandardCoverTree>
         (relError, absError, kernel::TriangularKernel(bandwidth));
   }
   else if (kernelType == TRIANGULAR_KERNEL && treeType == OCTREE)
   {
-    kdeModel = new KDEType<kernel::TriangularKernel, tree::Octree>
+    kdeModel = KDEType<kernel::TriangularKernel, tree::Octree>
         (relError, absError, kernel::TriangularKernel(bandwidth));
   }
   else if (kernelType == TRIANGULAR_KERNEL && treeType == R_TREE)
   {
-    kdeModel = new KDEType<kernel::TriangularKernel, tree::RTree>
+    kdeModel = KDEType<kernel::TriangularKernel, tree::RTree>
         (relError, absError, kernel::TriangularKernel(bandwidth));
   }
 
@@ -285,12 +276,6 @@ inline void KDEModel::Evaluate(arma::vec& estimations)
   boost::apply_visitor(eval, kdeModel);
 }
 
-// Clean memory.
-inline void KDEModel::CleanMemory()
-{
-  boost::apply_visitor(DeleteVisitor(), kdeModel);
-}
-
 // Parameters for KDE evaluation.
 DualMonoKDE::DualMonoKDE(arma::vec& estimations):
     estimations(estimations)
@@ -301,20 +286,13 @@ template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
                   typename TreeMatType> class TreeType>
-void DualMonoKDE::operator()(KDETypeT<KernelType, TreeType>* kde) const
+void DualMonoKDE::operator()(KDETypeT<KernelType, TreeType>& kde) const
 {
-  if (kde)
-  {
-    kde->Evaluate(estimations);
-    const size_t dimension = (kde->ReferenceTree())->Dataset().n_rows;
-    KernelNormalizer::ApplyNormalizer<KernelType>(kde->Kernel(),
-                                                  dimension,
-                                                  estimations);
-  }
-  else
-  {
-    throw std::runtime_error("no KDE model initialized");
-  }
+  kde.Evaluate(estimations);
+  const size_t dimension = (kde.ReferenceTree())->Dataset().n_rows;
+  KernelNormalizer::ApplyNormalizer<KernelType>(kde.Kernel(),
+                                                dimension,
+                                                estimations);
 }
 
 // Parameters for KDE evaluation.
@@ -329,19 +307,12 @@ template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
                   typename TreeMatType> class TreeType>
-void DualBiKDE::operator()(KDETypeT<KernelType, TreeType>* kde) const
+void DualBiKDE::operator()(KDETypeT<KernelType, TreeType>& kde) const
 {
-  if (kde)
-  {
-    kde->Evaluate(std::move(querySet), estimations);
-    KernelNormalizer::ApplyNormalizer<KernelType>(kde->Kernel(),
-                                                  dimension,
-                                                  estimations);
-  }
-  else
-  {
-    throw std::runtime_error("no KDE model initialized");
-  }
+  kde.Evaluate(std::move(querySet), estimations);
+  KernelNormalizer::ApplyNormalizer<KernelType>(kde.Kernel(),
+                                                dimension,
+                                                estimations);
 }
 
 // Parameters for Train.
@@ -354,13 +325,10 @@ template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
                   typename TreeMatType> class TreeType>
-void TrainVisitor::operator()(KDEType<KernelType, TreeType>* kde) const
+void TrainVisitor::operator()(KDEType<KernelType, TreeType>& kde) const
 {
   Log::Info << "Training KDE model..." << std::endl;
-  if (kde)
-    kde->Train(std::move(referenceSet));
-  else
-    throw std::runtime_error("no KDE model initialized");
+  kde.Train(std::move(referenceSet));
 }
 
 // Modify kernel bandwidth.
@@ -373,12 +341,9 @@ template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
                   typename TreeMatType> class TreeType>
-void BandwidthVisitor::operator()(KDEType<KernelType, TreeType>* kde) const
+void BandwidthVisitor::operator()(KDEType<KernelType, TreeType>& kde) const
 {
-  if (kde)
-    kde->Kernel() = KernelType(bandwidth);
-  else
-    throw std::runtime_error("no KDE model initialized");
+  kde.Kernel() = KernelType(bandwidth);
 }
 
 // Modify relative error tolerance.
@@ -391,12 +356,9 @@ template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
                   typename TreeMatType> class TreeType>
-void RelErrorVisitor::operator()(KDEType<KernelType, TreeType>* kde) const
+void RelErrorVisitor::operator()(KDEType<KernelType, TreeType>& kde) const
 {
-  if (kde)
-    kde->RelativeError(relError);
-  else
-    throw std::runtime_error("no KDE model initialized");
+  kde.RelativeError(relError);
 }
 
 // Modify absolute error tolerance.
@@ -409,12 +371,9 @@ template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
                   typename TreeMatType> class TreeType>
-void AbsErrorVisitor::operator()(KDEType<KernelType, TreeType>* kde) const
+void AbsErrorVisitor::operator()(KDEType<KernelType, TreeType>& kde) const
 {
-  if (kde)
-    kde->AbsoluteError(absError);
-  else
-    throw std::runtime_error("no KDE model initialized");
+  kde.AbsoluteError(absError);
 }
 
 // Activate or deactivate Monte Carlo.
@@ -427,12 +386,9 @@ template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
                   typename TreeMatType> class TreeType>
-void MonteCarloVisitor::operator()(KDEType<KernelType, TreeType>* kde) const
+void MonteCarloVisitor::operator()(KDEType<KernelType, TreeType>& kde) const
 {
-  if (kde)
-    kde->MonteCarlo() = monteCarlo;
-  else
-    throw std::runtime_error("no KDE model initialized");
+  kde.MonteCarlo() = monteCarlo;
 }
 
 // Set Monte Carlo probability.
@@ -445,12 +401,9 @@ template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
                   typename TreeMatType> class TreeType>
-void MCProbabilityVisitor::operator()(KDEType<KernelType, TreeType>* kde) const
+void MCProbabilityVisitor::operator()(KDEType<KernelType, TreeType>& kde) const
 {
-  if (kde)
-    kde->MCProb(probability);
-  else
-    throw std::runtime_error("no KDE model initialized");
+  kde.MCProb(probability);
 }
 
 // Set Monte Carlo sample size.
@@ -463,12 +416,9 @@ template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
                   typename TreeMatType> class TreeType>
-void MCSampleSizeVisitor::operator()(KDEType<KernelType, TreeType>* kde) const
+void MCSampleSizeVisitor::operator()(KDEType<KernelType, TreeType>& kde) const
 {
-  if (kde)
-    kde->MCInitialSampleSize() = sampleSize;
-  else
-    throw std::runtime_error("no KDE model initialized");
+  kde.MCInitialSampleSize() = sampleSize;
 }
 
 // Set Monte Carlo entry coefficient.
@@ -481,12 +431,9 @@ template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
                   typename TreeMatType> class TreeType>
-void MCEntryCoefVisitor::operator()(KDEType<KernelType, TreeType>* kde) const
+void MCEntryCoefVisitor::operator()(KDEType<KernelType, TreeType>& kde) const
 {
-  if (kde)
-    kde->MCEntryCoef(entryCoef);
-  else
-    throw std::runtime_error("no KDE model initialized");
+  kde.MCEntryCoef(entryCoef);
 }
 
 // Set Monte Carlo break coefficient.
@@ -499,21 +446,11 @@ template<typename KernelType,
          template<typename TreeMetricType,
                   typename TreeStatType,
                   typename TreeMatType> class TreeType>
-void MCBreakCoefVisitor::operator()(KDEType<KernelType, TreeType>* kde) const
+void MCBreakCoefVisitor::operator()(KDEType<KernelType, TreeType>& kde) const
 {
-  if (kde)
-    kde->MCBreakCoef(breakCoef);
-  else
-    throw std::runtime_error("no KDE model initialized");
+  kde.MCBreakCoef(breakCoef);
 }
 
-// Delete model.
-template<typename KDEType>
-void DeleteVisitor::operator()(KDEType* kde) const
-{
-  if (kde)
-    delete kde;
-}
 
 // Mode of model.
 template<typename KDEType>
@@ -565,9 +502,6 @@ void KDEModel::serialize(Archive& ar, const unsigned int version)
     mcEntryCoef = KDEDefaultParams::mcEntryCoef;
     mcBreakCoef = KDEDefaultParams::mcBreakCoef;
   }
-
-  if (Archive::is_loading::value)
-    boost::apply_visitor(DeleteVisitor(), kdeModel);
 
   ar & BOOST_SERIALIZATION_NVP(kdeModel);
 }

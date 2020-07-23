@@ -103,7 +103,7 @@ class DualMonoKDE : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDETypeT<KernelType, TreeType>* kde) const;
+  void operator()(KDETypeT<KernelType, TreeType>& kde) const;
 
   // TODO Implement specific cases where a leaf size can be selected.
 
@@ -140,7 +140,7 @@ class DualBiKDE : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDETypeT<KernelType, TreeType>* kde) const;
+  void operator()(KDETypeT<KernelType, TreeType>& kde) const;
 
   // TODO Implement specific cases where a leaf size can be selected.
 
@@ -163,7 +163,7 @@ class TrainVisitor : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDEType<KernelType, TreeType>* kde) const;
+  void operator()(KDEType<KernelType, TreeType>& kde) const;
 
   // TODO Implement specific cases where a leaf size can be selected.
 
@@ -186,7 +186,7 @@ class BandwidthVisitor : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDEType<KernelType, TreeType>* kde) const;
+  void operator()(KDEType<KernelType, TreeType>& kde) const;
 
   //! BandwidthVisitor constructor.
   BandwidthVisitor(const double bandwidth);
@@ -207,7 +207,7 @@ class RelErrorVisitor : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDEType<KernelType, TreeType>* kde) const;
+  void operator()(KDEType<KernelType, TreeType>& kde) const;
 
   //! RelErrorVisitor constructor.
   RelErrorVisitor(const double relError);
@@ -228,7 +228,7 @@ class AbsErrorVisitor : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDEType<KernelType, TreeType>* kde) const;
+  void operator()(KDEType<KernelType, TreeType>& kde) const;
 
   //! AbsErrorVisitor constructor.
   AbsErrorVisitor(const double absError);
@@ -249,7 +249,7 @@ class MonteCarloVisitor : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDEType<KernelType, TreeType>* kde) const;
+  void operator()(KDEType<KernelType, TreeType>& kde) const;
 
   //! MonteCarloVisitor constructor.
   MonteCarloVisitor(const bool monteCarlo);
@@ -270,7 +270,7 @@ class MCProbabilityVisitor : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDEType<KernelType, TreeType>* kde) const;
+  void operator()(KDEType<KernelType, TreeType>& kde) const;
 
   //! MCProbabilityVisitor constructor.
   MCProbabilityVisitor(const double probability);
@@ -292,7 +292,7 @@ class MCSampleSizeVisitor : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDEType<KernelType, TreeType>* kde) const;
+  void operator()(KDEType<KernelType, TreeType>& kde) const;
 
   //! MCSampleSizeVisitor constructor.
   MCSampleSizeVisitor(const size_t sampleSize);
@@ -313,7 +313,7 @@ class MCEntryCoefVisitor : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDEType<KernelType, TreeType>* kde) const;
+  void operator()(KDEType<KernelType, TreeType>& kde) const;
 
   //! MCEntryCoefVisitor constructor.
   MCEntryCoefVisitor(const double entryCoef);
@@ -334,7 +334,7 @@ class MCBreakCoefVisitor : public boost::static_visitor<void>
            template<typename TreeMetricType,
                     typename TreeStatType,
                     typename TreeMatType> class TreeType>
-  void operator()(KDEType<KernelType, TreeType>* kde) const;
+  void operator()(KDEType<KernelType, TreeType>& kde) const;
 
   //! MCBreakCoefVisitor constructor.
   MCBreakCoefVisitor(const double breakCoef);
@@ -351,12 +351,6 @@ class ModeVisitor : public boost::static_visitor<KDEMode&>
   KDEMode& operator()(KDEType* kde) const;
 };
 
-class DeleteVisitor : public boost::static_visitor<void>
-{
- public:
-  //! Delete KDEType instance.
-  template<typename KDEType>
-  void operator()(KDEType* kde) const;
 };
 
 class KDEModel
@@ -412,35 +406,38 @@ class KDEModel
   //! Break coefficient for Monte Carlo estimations.
   double mcBreakCoef;
 
+  //! Mode of the KDE algorithm.
+  KDEMode mode;
+
   /**
    * kdeModel holds an instance of each possible combination of KernelType and
    * TreeType. It is initialized using BuildModel.
    */
-  boost::variant<KDEType<kernel::GaussianKernel, tree::KDTree>*,
-                 KDEType<kernel::GaussianKernel, tree::BallTree>*,
-                 KDEType<kernel::GaussianKernel, tree::StandardCoverTree>*,
-                 KDEType<kernel::GaussianKernel, tree::Octree>*,
-                 KDEType<kernel::GaussianKernel, tree::RTree>*,
-                 KDEType<kernel::EpanechnikovKernel, tree::KDTree>*,
-                 KDEType<kernel::EpanechnikovKernel, tree::BallTree>*,
-                 KDEType<kernel::EpanechnikovKernel, tree::StandardCoverTree>*,
-                 KDEType<kernel::EpanechnikovKernel, tree::Octree>*,
-                 KDEType<kernel::EpanechnikovKernel, tree::RTree>*,
-                 KDEType<kernel::LaplacianKernel, tree::KDTree>*,
-                 KDEType<kernel::LaplacianKernel, tree::BallTree>*,
-                 KDEType<kernel::LaplacianKernel, tree::StandardCoverTree>*,
-                 KDEType<kernel::LaplacianKernel, tree::Octree>*,
-                 KDEType<kernel::LaplacianKernel, tree::RTree>*,
-                 KDEType<kernel::SphericalKernel, tree::KDTree>*,
-                 KDEType<kernel::SphericalKernel, tree::BallTree>*,
-                 KDEType<kernel::SphericalKernel, tree::StandardCoverTree>*,
-                 KDEType<kernel::SphericalKernel, tree::Octree>*,
-                 KDEType<kernel::SphericalKernel, tree::RTree>*,
-                 KDEType<kernel::TriangularKernel, tree::KDTree>*,
-                 KDEType<kernel::TriangularKernel, tree::BallTree>*,
-                 KDEType<kernel::TriangularKernel, tree::StandardCoverTree>*,
-                 KDEType<kernel::TriangularKernel, tree::Octree>*,
-                 KDEType<kernel::TriangularKernel, tree::RTree>*> kdeModel;
+  boost::variant<KDEType<kernel::GaussianKernel, tree::KDTree>,
+                 KDEType<kernel::GaussianKernel, tree::BallTree>,
+                 KDEType<kernel::GaussianKernel, tree::StandardCoverTree>,
+                 KDEType<kernel::GaussianKernel, tree::Octree>,
+                 KDEType<kernel::GaussianKernel, tree::RTree>,
+                 KDEType<kernel::EpanechnikovKernel, tree::KDTree>,
+                 KDEType<kernel::EpanechnikovKernel, tree::BallTree>,
+                 KDEType<kernel::EpanechnikovKernel, tree::StandardCoverTree>,
+                 KDEType<kernel::EpanechnikovKernel, tree::Octree>,
+                 KDEType<kernel::EpanechnikovKernel, tree::RTree>,
+                 KDEType<kernel::LaplacianKernel, tree::KDTree>,
+                 KDEType<kernel::LaplacianKernel, tree::BallTree>,
+                 KDEType<kernel::LaplacianKernel, tree::StandardCoverTree>,
+                 KDEType<kernel::LaplacianKernel, tree::Octree>,
+                 KDEType<kernel::LaplacianKernel, tree::RTree>,
+                 KDEType<kernel::SphericalKernel, tree::KDTree>,
+                 KDEType<kernel::SphericalKernel, tree::BallTree>,
+                 KDEType<kernel::SphericalKernel, tree::StandardCoverTree>,
+                 KDEType<kernel::SphericalKernel, tree::Octree>,
+                 KDEType<kernel::SphericalKernel, tree::RTree>,
+                 KDEType<kernel::TriangularKernel, tree::KDTree>,
+                 KDEType<kernel::TriangularKernel, tree::BallTree>,
+                 KDEType<kernel::TriangularKernel, tree::StandardCoverTree>,
+                 KDEType<kernel::TriangularKernel, tree::Octree>,
+                 KDEType<kernel::TriangularKernel, tree::RTree>> kdeModel;
 
  public:
   /**
@@ -492,9 +489,6 @@ class KDEModel
    * @param other KDEModel to copy.
    */
   KDEModel& operator=(KDEModel other);
-
-  //! Destroy the KDEModel object.
-  ~KDEModel();
 
   //! Serialize the KDE model.
   template<typename Archive>
@@ -598,11 +592,6 @@ class KDEModel
    *                    order as the query points.
    */
   void Evaluate(arma::vec& estimations);
-
-
- private:
-  //! Clean memory.
-  void CleanMemory();
 };
 
 } // namespace kde
