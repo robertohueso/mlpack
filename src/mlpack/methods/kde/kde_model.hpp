@@ -343,14 +343,22 @@ class MCBreakCoefVisitor : public boost::static_visitor<void>
 /**
  * ModeVisitor exposes the Mode() method of the KDEType.
  */
-class ModeVisitor : public boost::static_visitor<KDEMode&>
+class ModeVisitor : public boost::static_visitor<void>
 {
+ private:
+  //! Mode of KDE algorithm.
+  const KDEMode mode;
+
  public:
   //! Return mode of KDEType instance.
-  template<typename KDEType>
-  KDEMode& operator()(KDEType* kde) const;
-};
+  template<typename KernelType,
+           template<typename TreeMetricType,
+                    typename TreeStatType,
+                    typename TreeMatType> class TreeType>
+  void operator()(KDEType<KernelType, TreeType>& kde) const;
 
+  //! ModeVisitor constructor.
+  ModeVisitor(const KDEMode mode);
 };
 
 class KDEModel
@@ -555,10 +563,10 @@ class KDEModel
   void MCBreakCoefficient(const double newBreakCoef);
 
   //! Get the mode of the model.
-  KDEMode Mode() const;
+  KDEMode Mode() const { return mode; }
 
   //! Modify the mode of the model.
-  KDEMode& Mode();
+  void Mode(const KDEMode newMode);
 
   /**
    * Build the KDE model with the given parameters and then trains it with the

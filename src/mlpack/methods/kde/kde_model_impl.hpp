@@ -40,7 +40,8 @@ inline KDEModel::KDEModel(const double bandwidth,
   mcProb(mcProb),
   initialSampleSize(initialSampleSize),
   mcEntryCoef(mcEntryCoef),
-  mcBreakCoef(mcBreakCoef)
+  mcBreakCoef(mcBreakCoef),
+  mode(KDEDefaultParams::mode)
 {
   // Nothing to do.
 }
@@ -56,7 +57,8 @@ inline KDEModel::KDEModel(const KDEModel& other) :
   mcProb(other.mcProb),
   initialSampleSize(other.initialSampleSize),
   mcEntryCoef(other.mcEntryCoef),
-  mcBreakCoef(other.mcBreakCoef)
+  mcBreakCoef(other.mcBreakCoef),
+  mode(other.mode)
 {
   // Nothing to do.
 }
@@ -73,6 +75,7 @@ inline KDEModel::KDEModel(KDEModel&& other) :
   initialSampleSize(other.initialSampleSize),
   mcEntryCoef(other.mcEntryCoef),
   mcBreakCoef(other.mcBreakCoef),
+  mode(other.mode),
   kdeModel(std::move(other.kdeModel))
 {
   // Reset other model.
@@ -86,6 +89,7 @@ inline KDEModel::KDEModel(KDEModel&& other) :
   other.initialSampleSize = KDEDefaultParams::initialSampleSize;
   other.mcEntryCoef = KDEDefaultParams::mcEntryCoef;
   other.mcBreakCoef = KDEDefaultParams::mcBreakCoef;
+  other.mode = KDEDefaultParams::mode;
   other.kdeModel = decltype(other.kdeModel)();
 }
 
@@ -254,6 +258,10 @@ inline void KDEModel::BuildModel(arma::mat&& referenceSet)
   // Set Monte Carlo break coefficient.
   MCBreakCoefVisitor breakCoefficientVisitor(mcBreakCoef);
   boost::apply_visitor(breakCoefficientVisitor, kdeModel);
+
+  // Set KDE mode.
+  ModeVisitor modeVisitor(mode);
+  boost::apply_visitor(modeVisitor, kdeModel);
 
   // Train the model.
   TrainVisitor train(std::move(referenceSet));
@@ -451,27 +459,19 @@ void MCBreakCoefVisitor::operator()(KDEType<KernelType, TreeType>& kde) const
   kde.MCBreakCoef(breakCoef);
 }
 
+// Set KDE mode.
+ModeVisitor::ModeVisitor(const KDEMode mode) :
+    mode(mode)
+{}
 
 // Mode of model.
-template<typename KDEType>
-KDEMode& ModeVisitor::operator()(KDEType* kde) const
+template<typename KernelType,
+         template<typename TreeMetricType,
+                  typename TreeStatType,
+                  typename TreeMatType> class TreeType>
+void ModeVisitor::operator()(KDEType<KernelType, TreeType>& kde) const
 {
-  if (kde)
-    return kde->Mode();
-  else
-    throw std::runtime_error("no KDE model initialized");
-}
-
-// Get mode of model.
-KDEMode KDEModel::Mode() const
-{
-  return boost::apply_visitor(ModeVisitor(), kdeModel);
-}
-
-// Modify mode of model.
-KDEMode& KDEModel::Mode()
-{
-  return boost::apply_visitor(ModeVisitor(), kdeModel);
+  kde.Mode() = mode;
 }
 
 // Serialize the model.
@@ -493,6 +493,7 @@ void KDEModel::serialize(Archive& ar, const unsigned int version)
     ar & BOOST_SERIALIZATION_NVP(initialSampleSize);
     ar & BOOST_SERIALIZATION_NVP(mcEntryCoef);
     ar & BOOST_SERIALIZATION_NVP(mcBreakCoef);
+    ar & BOOST_SERIALIZATION_NVP(mode);
   }
   else if (Archive::is_loading::value)
   {
@@ -501,6 +502,7 @@ void KDEModel::serialize(Archive& ar, const unsigned int version)
     initialSampleSize = KDEDefaultParams::initialSampleSize;
     mcEntryCoef = KDEDefaultParams::mcEntryCoef;
     mcBreakCoef = KDEDefaultParams::mcBreakCoef;
+    mode = KDEDefaultParams::mode;
   }
 
   ar & BOOST_SERIALIZATION_NVP(kdeModel);
@@ -568,6 +570,14 @@ void KDEModel::MCBreakCoefficient(const double newBreakCoef)
   mcBreakCoef = newBreakCoef;
   MCBreakCoefVisitor mcBreakCoefVisitor(newBreakCoef);
   boost::apply_visitor(mcBreakCoefVisitor, kdeModel);
+}
+
+// Modify mode of the model.
+void KDEModel::Mode(const KDEMode newMode)
+{
+  mode = newMode;
+  ModeVisitor modeVisitor(newMode);
+  boost::apply_visitor(modeVisitor, kdeModel);
 }
 
 } // namespace kde

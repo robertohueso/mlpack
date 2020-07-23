@@ -280,9 +280,9 @@ static void mlpackMain()
 
     // Set Mode.
     if (modeStr == "dual-tree")
-      kde->Mode() = KDEMode::DUAL_TREE_MODE;
+      kde->Mode(KDEMode::DUAL_TREE_MODE);
     else if (modeStr == "single-tree")
-      kde->Mode() = KDEMode::SINGLE_TREE_MODE;
+      kde->Mode(KDEMode::SINGLE_TREE_MODE);
   }
   else
   {
